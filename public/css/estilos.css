@@ -1,0 +1,271 @@
+/* =========================================================
+   Estilos del punto de venta
+   Idea: fondo blanco, la fuente del sistema y un solo color (azul)
+   para lo importante: el total y el botón de finalizar.
+   ========================================================= */
+
+/* ---------- Colores (se cambian aquí y afectan a todo) ---------- */
+:root {
+    --texto:      #111827;
+    --gris:       #6b7280;
+    --linea:      #e5e7eb;
+    --fondo-suave:#f9fafb;
+    --blanco:     #ffffff;
+    --azul:       #1d4ed8;
+    --azul-hover: #1e40af;
+    --rojo:       #b91c1c;
+}
+
+* { box-sizing: border-box; }
+
+/* El atributo hidden siempre gana, aunque la sección tenga display: flex */
+[hidden] { display: none !important; }
+
+body {
+    margin: 0;
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    background: var(--blanco);
+    color: var(--texto);
+}
+
+h1, h2 { margin: 0; }
+
+/* Los montos usan números de ancho fijo para que queden alineados */
+.monto, .precio, td { font-variant-numeric: tabular-nums; }
+
+/* ---------- Botones ---------- */
+.boton {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 1px solid var(--texto);
+    border-radius: 6px;
+    background: var(--blanco);
+    color: var(--texto);
+    font: inherit;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+.boton:hover:not(:disabled) { background: var(--fondo-suave); }
+.boton:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Botón principal: azul lleno */
+.boton.principal { background: var(--azul); border-color: var(--azul); color: var(--blanco); }
+.boton.principal:hover:not(:disabled) { background: var(--azul-hover); }
+
+/* Cancelar: solo borde */
+.boton.rojo { border-color: var(--linea); color: var(--rojo); }
+
+/* "Quitar" dentro del carrito: parece un enlace */
+.boton.chico {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--gris);
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: underline;
+}
+.boton.chico:hover { color: var(--rojo); background: none; }
+
+/* =========================================================
+   PANTALLA DEL CAJERO
+   ========================================================= */
+
+.barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--linea);
+}
+.barra strong { font-size: 18px; }
+.barra a { color: var(--azul); font-size: 14px; text-decoration: none; }
+.barra a:hover { text-decoration: underline; }
+
+.columnas {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+    align-items: start;
+}
+
+.columnas h2 { margin-bottom: 16px; font-size: 20px; }
+
+/* Productos: botones simples en cuadrícula */
+.productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+.producto {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    border: 1px solid var(--linea);
+    border-radius: 8px;
+    background: var(--blanco);
+    color: var(--texto);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.producto strong { font-size: 16px; font-weight: 600; }
+.producto .precio { color: var(--gris); font-size: 15px; }
+.producto:hover { border-color: var(--azul); }
+.producto:active { background: var(--fondo-suave); }
+
+/* Carrito */
+.carrito-panel {
+    padding: 24px;
+    border: 1px solid var(--linea);
+    border-radius: 8px;
+}
+
+.tabla-carrito { width: 100%; border-collapse: collapse; font-size: 15px; }
+.tabla-carrito th {
+    padding: 0 6px 10px;
+    border-bottom: 1px solid var(--linea);
+    color: var(--gris);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+}
+.tabla-carrito td { padding: 12px 6px; border-bottom: 1px solid var(--linea); }
+.tabla-carrito th:nth-child(4),
+.tabla-carrito td:nth-child(4),
+.tabla-carrito td:last-child { text-align: right; }
+.tabla-carrito td:nth-child(2) { color: var(--gris); }
+.tabla-carrito input {
+    width: 60px;
+    padding: 6px 8px;
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    font: inherit;
+}
+.tabla-carrito input:focus { outline: 2px solid var(--azul); outline-offset: -1px; }
+
+/* Si el carrito está vacío se oculta la cabecera y se muestra el aviso */
+.vacio { display: none; margin: 0; padding: 32px 0; color: var(--gris); text-align: center; }
+.tabla-carrito:has(tbody:empty) thead { display: none; }
+.tabla-carrito:has(tbody:empty) + .vacio { display: block; }
+
+.total-linea {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 20px 0;
+    font-size: 18px;
+}
+.total-linea .monto { color: var(--azul); font-size: 32px; font-weight: 700; }
+
+.acciones { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+
+.mensaje { min-height: 20px; margin: 12px 0 0; color: var(--rojo); font-size: 14px; }
+
+/* En pantallas angostas las dos columnas se apilan */
+@media (max-width: 860px) {
+    .barra { padding: 14px 16px; }
+    .columnas { grid-template-columns: 1fr; gap: 32px; padding: 20px 16px; }
+    .columnas > section { min-width: 0; }
+    .carrito-panel { padding: 16px; }
+    .productos { grid-template-columns: repeat(2, 1fr); }
+    /* En el celular se oculta la columna Precio: el subtotal ya lo refleja */
+    .tabla-carrito th:nth-child(2),
+    .tabla-carrito td:nth-child(2) { display: none; }
+}
+
+/* =========================================================
+   PANTALLA DEL CLIENTE
+   ========================================================= */
+
+.pantalla-cliente {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Cada estado ocupa toda la pantalla, con el contenido centrado */
+.escena {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 32px;
+}
+
+.escena-bienvenida, .escena-gracias { align-items: center; text-align: center; }
+.escena-bienvenida h1, .escena-gracias h1 { font-size: clamp(44px, 7vw, 88px); font-weight: 700; }
+.escena-bienvenida p, .escena-gracias p { margin: 16px 0 0; color: var(--gris); font-size: 24px; }
+
+.escena-compra h1 { margin-bottom: 24px; font-size: 32px; }
+
+.tabla-cliente { width: 100%; border-collapse: collapse; font-size: clamp(18px, 2.4vw, 26px); }
+.tabla-cliente th {
+    padding: 0 0 12px;
+    border-bottom: 2px solid var(--texto);
+    color: var(--gris);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+}
+.tabla-cliente td { padding: 16px 0; border-bottom: 1px solid var(--linea); }
+.tabla-cliente td:nth-child(2) { width: 120px; color: var(--gris); }
+.tabla-cliente th:nth-child(3),
+.tabla-cliente td:nth-child(3) { text-align: right; }
+
+.total-cliente {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 28px;
+}
+.total-cliente > span:first-child { font-size: clamp(22px, 3vw, 32px); font-weight: 600; }
+.total-cliente .monto { color: var(--azul); font-size: clamp(48px, 8vw, 88px); font-weight: 700; }
+
+/* Barra azul que se vacía en 5 segundos, igual que DURACION_AGRADECIMIENTO en cliente.js */
+.cuenta-regresiva {
+    width: 240px;
+    height: 4px;
+    margin-top: 40px;
+    background: var(--linea);
+}
+.cuenta-regresiva span {
+    display: block;
+    height: 100%;
+    background: var(--azul);
+    transform-origin: left;
+    animation: vaciar 5s linear forwards;
+}
+@keyframes vaciar { to { transform: scaleX(0); } }
+
+@media (max-width: 860px) {
+    .escena { padding: 32px 16px; }
+    .tabla-cliente td:nth-child(2) { width: 60px; }
+}
+
+/* =========================================================
+   PÁGINA DE INICIO
+   ========================================================= */
+
+.pantalla-inicio {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    text-align: center;
+}
+.pantalla-inicio h1 { font-size: 40px; }
+.pantalla-inicio p { margin: 0 0 12px; color: var(--gris); }
+.pantalla-inicio .opciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
